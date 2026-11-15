@@ -75,8 +75,8 @@ class AttachmentImage extends ConsumerWidget {
   }) {
     final Size? displaySize = constrainMediaSize(
       dimensions: dimensions,
-      width: attachment.width,
-      height: attachment.height,
+      width: attachment.displayWidth,
+      height: attachment.displayHeight,
     );
     if (displaySize == null) {
       return const SizedBox.shrink();
@@ -147,6 +147,9 @@ class AttachmentImage extends ConsumerWidget {
                                 filename: attachment.filename,
                                 contentType: attachment.contentType,
                                 displaySize: displaySize,
+                                fit: attachment.isSvg
+                                    ? BoxFit.contain
+                                    : BoxFit.cover,
                                 placeholder: _buildImagePlaceholder(context),
                               ),
                       ),
@@ -233,6 +236,7 @@ class _AttachmentStaticImage extends StatelessWidget {
     required this.filename,
     required this.contentType,
     required this.displaySize,
+    required this.fit,
     required this.placeholder,
   });
 
@@ -240,6 +244,7 @@ class _AttachmentStaticImage extends StatelessWidget {
   final String filename;
   final String? contentType;
   final Size displaySize;
+  final BoxFit fit;
   final Widget placeholder;
 
   @override
@@ -253,7 +258,7 @@ class _AttachmentStaticImage extends StatelessWidget {
       height: displaySize.height,
       memCacheWidth: (displaySize.width * devicePixelRatio).round(),
       memCacheHeight: (displaySize.height * devicePixelRatio).round(),
-      fit: BoxFit.cover,
+      fit: fit,
       placeholder: placeholder,
       errorPlaceholder: const MediaLoadErrorPlaceholder(),
     );

@@ -178,6 +178,19 @@ bool attachmentHasLoadableUrl(Attachment attachment) {
   return attachmentEffectiveUrl(attachment).isNotEmpty;
 }
 
+/// Display size used for SVG attachments that arrive without intrinsic
+/// dimensions. SVGs are vector images, so the media proxy often cannot report
+/// a pixel size for them.
+const int kSvgFallbackDisplaySize = 256;
+
+bool isSvgAttachment(Attachment attachment) {
+  return isSvgImageMedia(
+    url: attachmentEffectiveUrl(attachment),
+    filename: attachment.filename,
+    contentType: attachment.contentType,
+  );
+}
+
 String? attachmentEffectiveDownloadUrl({
   required String url,
   required bool isExpired,

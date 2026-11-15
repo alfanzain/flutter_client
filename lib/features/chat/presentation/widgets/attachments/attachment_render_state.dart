@@ -25,7 +25,7 @@ AttachmentRenderState buildAttachmentRenderState({
   final bool hasUrl = attachmentHasLoadableUrl(attachment);
   final bool canRenderInlineMedia = inlineAttachmentMedia && hasUrl;
   final bool canRenderInlineVisualMedia =
-      canRenderInlineMedia && attachment.hasRenderableDimensions;
+      canRenderInlineMedia && attachment.canLayoutInline;
   if (attachment.isImage) {
     return AttachmentRenderState(
       attachment: attachment,

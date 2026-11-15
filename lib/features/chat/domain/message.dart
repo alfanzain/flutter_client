@@ -525,7 +525,24 @@ class Attachment {
 
   bool get isPreviewMedia => isImage || isVideo;
   bool get hasRenderableDimensions => (width ?? 0) > 0 && (height ?? 0) > 0;
-  bool get isInlineMedia => isPreviewMedia && hasRenderableDimensions;
+  bool get isSvg => isImage && isSvgAttachment(this);
+
+  /// Whether inline visual media can be laid out. SVGs can always be drawn at
+  /// a fallback size, even when the server could not report their dimensions.
+  bool get canLayoutInline => hasRenderableDimensions || isSvg;
+  bool get isInlineMedia => isPreviewMedia && canLayoutInline;
+
+  /// Width to lay the attachment out at: the real width, or a fallback for
+  /// SVGs without dimensions.
+  int? get displayWidth => hasRenderableDimensions
+      ? width
+      : (isSvg ? kSvgFallbackDisplaySize : width);
+
+  /// Height to lay the attachment out at: the real height, or a fallback for
+  /// SVGs without dimensions.
+  int? get displayHeight => hasRenderableDimensions
+      ? height
+      : (isSvg ? kSvgFallbackDisplaySize : height);
   bool get isSavableMedia => isImage || isVideo || isAudio;
   bool get isSpoiler => (flags & attachmentFlagIsSpoiler) != 0;
   bool get isMatureMedia =>
