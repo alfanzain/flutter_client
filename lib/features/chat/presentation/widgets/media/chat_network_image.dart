@@ -17,6 +17,7 @@ class ChatNetworkImage extends StatelessWidget {
     this.memCacheHeight,
     this.placeholder,
     this.errorPlaceholder = const SizedBox.shrink(),
+    this.decodeAsSvg,
     super.key,
   });
 
@@ -31,17 +32,22 @@ class ChatNetworkImage extends StatelessWidget {
   final Widget? placeholder;
   final Widget errorPlaceholder;
 
+  /// Overrides SVG detection. Pass false when the URL serves a rasterised
+  /// copy of an SVG, such as a media proxy URL.
+  final bool? decodeAsSvg;
+
   @override
   Widget build(BuildContext context) {
     final Widget? placeholder = this.placeholder;
     final Widget? boxedPlaceholder = placeholder == null
         ? null
         : SizedBox(width: width, height: height, child: placeholder);
-    if (isSvgImageMedia(
-      url: imageUrl,
-      filename: filename,
-      contentType: contentType,
-    )) {
+    if (decodeAsSvg ??
+        isSvgImageMedia(
+          url: imageUrl,
+          filename: filename,
+          contentType: contentType,
+        )) {
       return SvgPicture.network(
         imageUrl,
         headers: AttachmentRequestAuth.headersFor(imageUrl),

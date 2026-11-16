@@ -150,6 +150,12 @@ class AttachmentImage extends ConsumerWidget {
                                 fit: attachment.isSvg
                                     ? BoxFit.contain
                                     : BoxFit.cover,
+                                decodeAsSvg: shouldDecodeAsSvg(
+                                  url: attachment.url,
+                                  proxyUrl: attachment.proxyUrl,
+                                  filename: attachment.filename,
+                                  contentType: attachment.contentType,
+                                ),
                                 placeholder: _buildImagePlaceholder(context),
                               ),
                       ),
@@ -237,6 +243,7 @@ class _AttachmentStaticImage extends StatelessWidget {
     required this.contentType,
     required this.displaySize,
     required this.fit,
+    required this.decodeAsSvg,
     required this.placeholder,
   });
 
@@ -245,6 +252,7 @@ class _AttachmentStaticImage extends StatelessWidget {
   final String? contentType;
   final Size displaySize;
   final BoxFit fit;
+  final bool decodeAsSvg;
   final Widget placeholder;
 
   @override
@@ -259,6 +267,7 @@ class _AttachmentStaticImage extends StatelessWidget {
       memCacheWidth: (displaySize.width * devicePixelRatio).round(),
       memCacheHeight: (displaySize.height * devicePixelRatio).round(),
       fit: fit,
+      decodeAsSvg: decodeAsSvg,
       placeholder: placeholder,
       errorPlaceholder: const MediaLoadErrorPlaceholder(),
     );

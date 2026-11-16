@@ -334,6 +334,12 @@ class AttachmentMediaGrid extends ConsumerWidget {
                         memCacheWidth: cache.width,
                         memCacheHeight: cache.height,
                         fit: BoxFit.cover,
+                        decodeAsSvg: shouldDecodeAsSvg(
+                          url: attachment.url,
+                          proxyUrl: attachment.proxyUrl,
+                          filename: attachment.filename,
+                          contentType: attachment.contentType,
+                        ),
                         placeholder: MediaThumbHashPlaceholder(
                           thumbHash: attachment.placeholder,
                         ),

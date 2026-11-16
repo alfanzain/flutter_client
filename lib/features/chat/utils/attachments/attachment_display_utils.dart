@@ -191,6 +191,28 @@ bool isSvgAttachment(Attachment attachment) {
   );
 }
 
+/// Whether an SVG should be decoded with the vector loader.
+///
+/// The media proxy never serves SVG markup: it rasterises SVGs (to WebP)
+/// before sending them. Only an SVG without a proxy URL still arrives as
+/// SVG markup.
+bool shouldDecodeAsSvg({
+  required String url,
+  String? proxyUrl,
+  String? filename,
+  String? contentType,
+}) {
+  final String? trimmedProxy = proxyUrl?.trim();
+  if (trimmedProxy != null && trimmedProxy.isNotEmpty) {
+    return false;
+  }
+  return isSvgImageMedia(
+    url: url,
+    filename: filename,
+    contentType: contentType,
+  );
+}
+
 String? attachmentEffectiveDownloadUrl({
   required String url,
   required bool isExpired,
